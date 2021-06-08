@@ -47,23 +47,30 @@ function getMostPopularBooks(books) {
     .filter((_, index) => index < 5);
 }
 
+// Helper Function 
+const topFiveCount = arr => {
+  return arr.sort((a, b) => b.count - a.count)
+    .filter((_, index) => index < 5);
+}
+
 function getMostPopularAuthors(books, authors) {
-  
+
   let authId = [];
 
-    for (book in books) {
+  for (book in books) {
     authId.push(books[book].authorId);
   }
 
+  // Combines first and last names of authors along with associated id's 
   let authorNames = authors
-  .filter(ids => authId.includes(ids.id))
-  .reduce((acc, authName) => {
-    acc.push( {
-      id:parseInt(`${authName.id}`), 
-      name:`${authName.name.first} ${authName.name.last}`
-      } );
-    return acc;
-  }, []);
+    .filter(ids => authId.includes(ids.id))
+    .reduce((acc, authName) => {
+      acc.push({
+        id: parseInt(`${authName.id}`),
+        name: `${authName.name.first} ${authName.name.last}`
+      });
+      return acc;
+    }, []);
 
   let counts = books.reduce((acc, book) => {
     if (acc[book.authorId]) {
@@ -76,13 +83,14 @@ function getMostPopularAuthors(books, authors) {
   }, {});
 
   let final = authorNames.filter(name => name.id in counts).reduce((acc, names, index) => {
-    acc.push({name:`${names.name}`, count:parseInt(`${counts[names.id]}`)});
-        return acc;
-      }, []);
+    acc.push({
+      name: `${names.name}`,
+      count: parseInt(`${counts[names.id]}`)
+    });
+    return acc;
+  }, []);
 
-  return final
-  .sort((a, b) => b.count - a.count)
-  .filter((_, index) => index < 5);
+  return topFiveCount(final);
 }
 
 module.exports = {

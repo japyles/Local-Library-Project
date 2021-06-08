@@ -1,4 +1,3 @@
-
 function findAccountById(accounts, id) {
   return accounts.find(acc => acc.id === id);
 }
@@ -17,7 +16,7 @@ function getBooksPossessedByAccount(account, books, authors) {
     if (books[book].borrows.filter(ids => ids.id === account.id && ids.returned === false).length) {
       const found = {
         ...books[book],
-        author:authors.find(auth => auth.id === books[book].authorId)
+        author: authors.find(auth => auth.id === books[book].authorId)
       };
       results.push(found);
     }
